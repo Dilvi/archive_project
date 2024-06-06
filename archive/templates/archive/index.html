@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Archive</title>
+</head>
+<body>
+    <h1>Documents</h1>
+    <ul>
+        {% for document in documents %}
+            <li>{{ document.title }} - {{ document.inventory_number }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_document' %}">Add Document</a>
+</body>
+</html>

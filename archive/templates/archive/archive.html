@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Система управления архивом</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        form {
+            margin: 20px 0;
+        }
+        form input[type="text"], form input[type="number"], form input[type="date"] {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+        }
+        form button {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        form button:hover {
+            background: #555;
+        }
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+        table th {
+            background: #f4f4f4;
+        }
+        .search-results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Система управления архивом</h1>
+    </header>
+    <div class="container">
+        <h2>Добавить новый документ</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="add_document">Добавить документ</button>
+        </form>
+
+        <h2>Поиск документов по коду ячейки</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="cell_code" placeholder="Введите код ячейки">
+            <button type="submit" name="search_by_cell">Поиск</button>
+        </form>
+
+        {% if search_results %}
+        <div class="search-results">
+            <h2>Результаты поиска</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Тема</th>
+                        <th>Инвентарный номер</th>
+                        <th>Количество</th>
+                        <th>Дата поступления</th>
+                        <th>Код ячейки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in search_results %}
+                    <tr>
+                        <td>{{ document.title }}</td>
+                        <td>{{ document.topic }}</td>
+                        <td>{{ document.inventory_number }}</td>
+                        <td>{{ document.quantity }}</td>
+                        <td>{{ document.arrival_date }}</td>
+                        <td>{{ document.cell_code.cell_code }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <h2>Все документы</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Тема</th>
+                    <th>Инвентарный номер</th>
+                    <th>Количество</th>
+                    <th>Дата поступления</th>
+                    <th>Код ячейки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                <tr>
+                    <td>{{ document.title }}</td>
+                    <td>{{ document.topic }}</td>
+                    <td>{{ document.inventory_number }}</td>
+                    <td>{{ document.quantity }}</td>
+                    <td>{{ document.arrival_date }}</td>
+                    <td>{{ document.cell_code.cell_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
